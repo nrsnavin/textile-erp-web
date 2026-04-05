@@ -1,0 +1,46 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-primary: #1e50a0;
+  --color-primary-light: #2d78d4;
+  --color-primary-accent: #4d9fff;
+  --color-bg: #f5f7fa;
+  --color-sidebar-bg: #0d1b2e;
+  --color-sidebar-text: rgba(255, 255, 255, 0.75);
+  --color-sidebar-active: #1e50a0;
+  --font-sans: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), 'DM Mono', monospace;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  color: #1a1a2e;
+}
+
+/* Ant Design overrides */
+.ant-layout {
+  background: var(--color-bg);
+}
+
+.ant-menu-dark {
+  background: var(--color-sidebar-bg) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
