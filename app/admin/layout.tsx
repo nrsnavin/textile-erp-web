@@ -12,6 +12,7 @@ import {
   theme,
   Space,
   Breadcrumb,
+  Spin,
 } from 'antd';
 import {
   DashboardOutlined,
@@ -33,26 +34,10 @@ const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
 const NAV_ITEMS = [
-  {
-    key: '/admin/dashboard',
-    icon: <DashboardOutlined />,
-    label: 'Dashboard',
-  },
-  {
-    key: '/admin/buyers',
-    icon: <TeamOutlined />,
-    label: 'Buyers',
-  },
-  {
-    key: '/admin/suppliers',
-    icon: <ShopOutlined />,
-    label: 'Suppliers',
-  },
-  {
-    key: '/admin/purchase-orders',
-    icon: <ShoppingCartOutlined />,
-    label: 'Purchase Orders',
-  },
+  { key: '/admin/dashboard',       icon: <DashboardOutlined />,    label: 'Dashboard' },
+  { key: '/admin/buyers',          icon: <TeamOutlined />,         label: 'Buyers' },
+  { key: '/admin/suppliers',       icon: <ShopOutlined />,         label: 'Suppliers' },
+  { key: '/admin/purchase-orders', icon: <ShoppingCartOutlined />, label: 'Purchase Orders' },
 ];
 
 function getBreadcrumbs(pathname: string) {
@@ -62,56 +47,67 @@ function getBreadcrumbs(pathname: string) {
     const label =
       part === 'admin'
         ? 'Home'
-        : part
-            .split('-')
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(' ');
+        : part.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     return { label, href };
   });
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const router = useRouter();
+  const router   = useRouter();
   const pathname = usePathname();
+  const { token } = theme.useToken();
   const { user, clearAuth, initFromSession } = useAuthStore();
+  const [collapsed, setCollapsed] = useState(false);
+  const [ready, setReady]         = useState(false);
 
   useEffect(() => {
     initFromSession();
+    // Check if there's a session; redirect to login if not
+    const rt = tokenStore.getRefreshToken();
+    if (!rt) {
+      router.replace('/auth/login');
+    } else {
+      setReady(true);
+    }
   }, []);
-  const { token } = theme.useToken();
 
-  const activeKey = NAV_ITEMS.find((item) => pathname.startsWith(item.key))?.key ?? '';
-  const breadcrumbs = getBreadcrumbs(pathname);
+  const activeKey    = NAV_ITEMS.find((item) => pathname.startsWith(item.key))?.key ?? '';
+  const breadcrumbs  = getBreadcrumbs(pathname);
 
   async function handleLogout() {
-    const access = tokenStore.getAccessToken();
+    const access  = tokenStore.getAccessToken();
     const refresh = tokenStore.getRefreshToken();
     if (access) {
-      try {
-        await authClient.logout(access, refresh ?? undefined);
-      } catch {
-        // ignore
-      }
+      try { await authClient.logout(access, refresh ?? undefined); } catch { /* ignore */ }
     }
     clearAuth();
-    router.push('/auth/login');
+    router.replace('/auth/login');
   }
 
   const userMenuItems = [
-    { key: 'profile', icon: <UserOutlined />, label: 'Profile' },
-    { key: 'change-password', icon: <KeyOutlined />, label: 'Change Password' },
+    { key: 'profile',         icon: <UserOutlined />,  label: 'Profile' },
+    { key: 'change-password', icon: <KeyOutlined />,   label: 'Change Password' },
     { type: 'divider' as const },
-    { key: 'logout', icon: <LogoutOutlined />, label: 'Logout', danger: true },
+    { key: 'logout',          icon: <LogoutOutlined />, label: 'Logout', danger: true },
   ];
 
   function onUserMenuClick({ key }: { key: string }) {
-    if (key === 'logout') handleLogout();
+    if (key === 'logout')          handleLogout();
     if (key === 'change-password') router.push('/admin/change-password');
+  }
+
+  // Show spinner while checking session
+  if (!ready) {
+    return (
+      <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Spin size="large" />
+      </div>
+    );
   }
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
+      {/* ── Sidebar ──────────────────────────────────────────────────── */}
       <Sider
         trigger={null}
         collapsible
@@ -140,41 +136,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           }}
         >
           {collapsed ? (
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                background: 'linear-gradient(135deg, #1e50a0, #2d78d4)',
-                borderRadius: 8,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontWeight: 700,
-                fontSize: 16,
-              }}
-            >
-              T
-            </div>
+            <div style={{
+              width: 32, height: 32,
+              background: 'linear-gradient(135deg, #1e50a0, #2d78d4)',
+              borderRadius: 8, display: 'flex', alignItems: 'center',
+              justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 16,
+            }}>T</div>
           ) : (
             <Space>
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  background: 'linear-gradient(135deg, #1e50a0, #2d78d4)',
-                  borderRadius: 8,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontWeight: 700,
-                  fontSize: 16,
-                  flexShrink: 0,
-                }}
-              >
-                T
-              </div>
+              <div style={{
+                width: 32, height: 32,
+                background: 'linear-gradient(135deg, #1e50a0, #2d78d4)',
+                borderRadius: 8, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', color: '#fff', fontWeight: 700,
+                fontSize: 16, flexShrink: 0,
+              }}>T</div>
               <Text style={{ color: '#fff', fontWeight: 700, fontSize: 15 }}>Textile ERP</Text>
             </Space>
           )}
@@ -192,22 +168,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         />
       </Sider>
 
+      {/* ── Main area ─────────────────────────────────────────────────── */}
       <Layout style={{ marginLeft: collapsed ? 64 : 220, transition: 'margin-left 0.2s' }}>
         {/* Header */}
-        <Header
-          style={{
-            background: '#fff',
-            padding: '0 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-            position: 'sticky',
-            top: 0,
-            zIndex: 99,
-            height: 64,
-          }}
-        >
+        <Header style={{
+          background: '#fff',
+          padding: '0 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 99,
+          height: 64,
+        }}>
           <Space>
             <Button
               type="text"
@@ -244,13 +219,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Space>
         </Header>
 
-        {/* Main content */}
-        <Content
-          style={{
-            margin: '24px',
-            minHeight: 'calc(100vh - 112px)',
-          }}
-        >
+        {/* Page content */}
+        <Content style={{ margin: '24px', minHeight: 'calc(100vh - 112px)' }}>
           {children}
         </Content>
       </Layout>
