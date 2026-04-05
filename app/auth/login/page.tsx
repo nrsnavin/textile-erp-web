@@ -14,6 +14,16 @@ export default function LoginPage() {
   const [error, setError]       = useState('');
   const [showPass, setShowPass] = useState(false);
 
+  function getRedirectPath(roles: string[]): string {
+    if (roles.includes('OWNER') || roles.includes('ADMIN')) return '/admin/dashboard';
+    if (roles.includes('MERCHANDISER'))   return '/admin/buyers';
+    if (roles.includes('PRODUCTION_MGR')) return '/admin/purchase-orders';
+    if (roles.includes('STORE_MANAGER'))  return '/admin/purchase-orders';
+    if (roles.includes('ACCOUNTANT'))     return '/admin/dashboard';
+    if (roles.includes('QC_INSPECTOR'))   return '/admin/dashboard';
+    return '/admin/dashboard';
+  }
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError(''); setLoading(true);
@@ -21,7 +31,8 @@ export default function LoginPage() {
       const result = await authClient.login(email, password);
       if (result.accessToken) {
         setAuth(result);
-        router.push('/admin/dashboard');
+        const roles = result.user?.roles ?? [];
+        router.push(getRedirectPath(roles));
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');

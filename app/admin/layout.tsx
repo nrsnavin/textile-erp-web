@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   Layout,
@@ -74,7 +74,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { user, clearAuth } = useAuthStore();
+  const { user, clearAuth, initFromSession } = useAuthStore();
+
+  useEffect(() => {
+    initFromSession();
+  }, []);
   const { token } = theme.useToken();
 
   const activeKey = NAV_ITEMS.find((item) => pathname.startsWith(item.key))?.key ?? '';
