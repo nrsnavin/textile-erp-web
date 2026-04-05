@@ -437,9 +437,177 @@ body {
 .no-token p { color: rgba(255,255,255,0.45); font-size: 14px; margin-bottom: 20px; }
 .link-btn { color: #4d9fff; text-decoration: none; font-size: 14px; }
 
+/* ── Register page ────────────────────────────────────────────────────────── */
+
+.register-wrap {
+  width: 100%;
+  max-width: 520px;
+  padding: 24px;
+}
+
+.register-card {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 44px 40px;
+}
+
+.register-header { margin-bottom: 32px; }
+
+.register-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.register-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.40);
+  line-height: 1.6;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.register-card label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 7px;
+}
+
+.register-card input,
+.register-card select {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  padding: 13px 14px;
+  font-size: 14px;
+  color: #fff;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.register-card select option {
+  background: #1a2235;
+  color: #fff;
+}
+
+.register-card input:focus,
+.register-card select:focus {
+  border-color: rgba(45,120,212,0.6);
+  background: rgba(45,120,212,0.08);
+}
+
+.register-card input::placeholder { color: rgba(255,255,255,0.22); }
+.register-card input.valid { border-color: rgba(34,197,94,0.5); }
+.register-card input.invalid { border-color: rgba(220,38,38,0.5); }
+
+.register-card .input-wrap { position: relative; }
+.register-card .pass-toggle {
+  position: absolute;
+  right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  padding: 4px;
+  display: flex;
+  transition: color 0.2s;
+}
+.register-card .pass-toggle:hover { color: rgba(255,255,255,0.7); }
+.register-card .pass-toggle svg { width: 17px; height: 17px; }
+
+.pw-strength {
+  margin-top: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+.pw-bar {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.10);
+  transition: background 0.3s;
+}
+
+.pw-bar.weak   { background: #ef4444; }
+.pw-bar.fair   { background: #f97316; }
+.pw-bar.good   { background: #eab308; }
+.pw-bar.strong { background: #22c55e; }
+
+.pw-label {
+  font-size: 11px;
+  margin-top: 5px;
+  color: rgba(255,255,255,0.35);
+}
+.pw-label.weak   { color: #ef4444; }
+.pw-label.fair   { color: #f97316; }
+.pw-label.good   { color: #eab308; }
+.pw-label.strong { color: #22c55e; }
+
+.tenant-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.28);
+  margin-top: 6px;
+  font-family: 'DM Mono', var(--font-dm-mono), monospace;
+}
+
+.register-footer {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.35);
+}
+
+.register-footer a {
+  color: #4d9fff;
+  text-decoration: none;
+  margin-left: 4px;
+  transition: opacity 0.2s;
+}
+.register-footer a:hover { opacity: 0.75; }
+
+.success-card {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 56px 40px;
+  text-align: center;
+}
+
+/* login page — bottom link row */
+.auth-switch {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.35);
+}
+.auth-switch a {
+  color: #4d9fff;
+  text-decoration: none;
+  margin-left: 4px;
+  transition: opacity 0.2s;
+}
+.auth-switch a:hover { opacity: 0.75; }
+
 @media (max-width: 768px) {
   .page { grid-template-columns: 1fr; }
   .left { display: none; }
   .right { padding: 40px 24px; }
   .wrap { width: 100%; }
+  .register-wrap { width: 100%; }
+  .form-row { grid-template-columns: 1fr; }
 }

@@ -227,6 +227,11 @@ export default function LoginPage() {
                 ) : 'Continue'}
               </button>
             </form>
+
+            <div className="auth-switch">
+              Don&apos;t have an account?
+              <a href="/auth/register">Create one</a>
+            </div>
           </>
         ) : (
           <>

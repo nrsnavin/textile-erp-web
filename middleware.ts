@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Public routes — no auth required
 const PUBLIC_PATHS = [
   '/auth/login',
+  '/auth/register',
   '/auth/forgot-password',
   '/auth/reset-password',
   '/auth/verify-otp',

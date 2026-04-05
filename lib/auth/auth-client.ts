@@ -47,7 +47,20 @@ async function postAuth<T>(path: string, body: unknown, token: string): Promise<
   return json.data ?? json;
 }
 
+export interface RegisterResult {
+  message: string;
+  userId:  string;
+}
+
 export const authClient = {
+  register: (data: {
+    name:     string;
+    email:    string;
+    password: string;
+    tenantId: string;
+    roles?:   string[];
+  }) => post<RegisterResult>('/api/v1/auth/register', data),
+
   login: (email: string, password: string) =>
     post<LoginResult>('/api/v1/auth/login', { email, password }),
 
