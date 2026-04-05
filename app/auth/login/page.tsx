@@ -33,6 +33,8 @@ export default function LoginPage() {
         setAuth(result);
         const roles = result.user?.roles ?? [];
         router.push(getRedirectPath(roles));
+      } else {
+        setError('Login failed — no token received. Please try again.');
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
