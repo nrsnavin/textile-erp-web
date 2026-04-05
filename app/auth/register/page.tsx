@@ -105,12 +105,9 @@ export default function RegisterPage() {
             </svg>
           </div>
           <div className="success-title">Account created!</div>
-          <p className="success-sub" style={{ marginBottom: 28 }}>
-            {done.message}
-          </p>
-          <p className="success-sub" style={{ marginBottom: 32, fontSize: 13 }}>
-            Check <strong style={{ color: 'rgba(255,255,255,0.65)' }}>{done.email}</strong>{' '}
-            for a 6-digit OTP to verify your email before you can sign in.
+          <p className="success-sub" style={{ marginBottom: 32 }}>
+            Your account for <strong style={{ color: 'rgba(255,255,255,0.65)' }}>{done.email}</strong>{' '}
+            has been created. You can now sign in.
           </p>
           <Link href="/auth/login" className="btn" style={{ display: 'inline-block', textDecoration: 'none', textAlign: 'center' }}>
             Go to Sign In
