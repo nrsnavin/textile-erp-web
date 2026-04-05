@@ -1,7 +1,7 @@
 // frontend/lib/auth/auth-client.ts
 // Typed client for all auth API calls
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3009';
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3008';
 
 export interface LoginResult {
   requiresMfa:  boolean;
