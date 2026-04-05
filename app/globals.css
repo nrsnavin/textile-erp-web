@@ -16,10 +16,13 @@
   --font-mono: var(--font-dm-mono), 'DM Mono', monospace;
 }
 
-html, body {
+html {
+  height: 100%;
+}
+
+body {
   height: 100%;
   font-family: var(--font-sans);
-  background: var(--color-bg);
   color: #1a1a2e;
 }
 

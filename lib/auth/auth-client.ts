@@ -1,7 +1,7 @@
 // frontend/lib/auth/auth-client.ts
 // Typed client for all auth API calls
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3009';
+const API = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 export interface LoginResult {
   requiresMfa:  boolean;
@@ -47,7 +47,20 @@ async function postAuth<T>(path: string, body: unknown, token: string): Promise<
   return json.data ?? json;
 }
 
+export interface RegisterResult {
+  message: string;
+  userId:  string;
+}
+
 export const authClient = {
+  register: (data: {
+    name:     string;
+    email:    string;
+    password: string;
+    tenantId: string;
+    roles?:   string[];
+  }) => post<RegisterResult>('/api/v1/auth/register', data),
+
   login: (email: string, password: string) =>
     post<LoginResult>('/api/v1/auth/login', { email, password }),
 
@@ -90,9 +103,13 @@ export const tokenStore = {
     _accessToken  = result.accessToken  ?? null;
     _refreshToken = result.refreshToken ?? null;
     _user         = result.user         ?? null;
-    // Persist refresh token in sessionStorage (survives page refresh)
     if (typeof window !== 'undefined' && result.refreshToken) {
       sessionStorage.setItem('_rt', result.refreshToken);
+      // Set cookie so middleware can verify the session server-side
+      document.cookie = `_refresh_token=${result.refreshToken}; path=/; SameSite=Lax; max-age=604800`;
+    }
+    if (typeof window !== 'undefined' && result.user) {
+      sessionStorage.setItem('_user', JSON.stringify(result.user));
     }
   },
   getAccessToken:  () => _accessToken,
@@ -101,11 +118,17 @@ export const tokenStore = {
       ? sessionStorage.getItem('_rt')
       : null
   ),
-  getUser:         () => _user,
+  getUser: () => _user ?? (
+    typeof window !== 'undefined'
+      ? (() => { try { const u = sessionStorage.getItem('_user'); return u ? JSON.parse(u) : null; } catch { return null; } })()
+      : null
+  ),
   clear() {
     _accessToken = _refreshToken = _user = null;
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('_rt');
+      sessionStorage.removeItem('_user');
+      document.cookie = '_refresh_token=; path=/; max-age=0';
     }
   },
 };
