@@ -221,6 +221,149 @@ export interface PoFilterParams {
   sortDir?: 'asc' | 'desc';
 }
 
+// ── Orders ────────────────────────────────────────────────────────────────────
+export type OrderStatus =
+  | 'DRAFT'
+  | 'CONFIRMED'
+  | 'IN_PRODUCTION'
+  | 'QC_PASSED'
+  | 'DISPATCHED'
+  | 'CANCELLED';
+
+export interface OrderLine {
+  id: string;
+  orderId: string;
+  itemId: string;
+  item?: Item;
+  styleCode: string;
+  colour?: string;
+  qty: number;
+  sizesJson: Record<string, number>;
+  unitPrice?: number;
+}
+
+export interface OrderRevision {
+  id: string;
+  orderId: string;
+  revisionNo: number;
+  changedFields: Record<string, { before: unknown; after: unknown }>;
+  linesSnapshot?: OrderLine[];
+  reason?: string;
+  createdAt: string;
+}
+
+export interface Order {
+  id: string;
+  tenantId: string;
+  buyerId: string;
+  buyer?: Buyer;
+  poNumber: string;
+  status: OrderStatus;
+  deliveryDate: string;
+  season?: string;
+  remarks?: string;
+  linesJson?: OrderLine[];
+  totalQty: number;
+  totalStyles: number;
+  lines?: OrderLine[];
+  revisions?: OrderRevision[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateOrderLineDto {
+  itemId: string;
+  styleCode: string;
+  colour?: string;
+  sizesJson: Record<string, number>;
+  unitPrice?: number;
+}
+
+export interface CreateOrderDto {
+  buyerId: string;
+  poNumber: string;
+  deliveryDate: string;
+  season?: string;
+  remarks?: string;
+  lines: CreateOrderLineDto[];
+}
+
+export interface OrderFilterParams {
+  page?: number;
+  limit?: number;
+  status?: OrderStatus;
+  buyerId?: string;
+  search?: string;
+  from?: string;
+  to?: string;
+  sortBy?: string;
+  sortDir?: 'asc' | 'desc';
+}
+
+// ── Inventory ─────────────────────────────────────────────────────────────────
+export interface BomLine {
+  id: string;
+  bomId: string;
+  rawItemId: string;
+  rawItem?: Item;
+  qty: number;
+  unit: string;
+  wastagePct: number;
+}
+
+export interface Bom {
+  id: string;
+  tenantId: string;
+  itemId: string;
+  item?: Item;
+  styleCode?: string;
+  version: number;
+  isActive: boolean;
+  remarks?: string;
+  lines?: BomLine[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBomLineDto {
+  rawItemId: string;
+  qty: number;
+  unit: string;
+  wastagePct?: number;
+}
+
+export interface CreateBomDto {
+  itemId: string;
+  styleCode?: string;
+  remarks?: string;
+  lines: CreateBomLineDto[];
+}
+
+export interface StockBalance {
+  id: string;
+  itemId: string;
+  item?: Item;
+  location: string;
+  onHand: number;
+  reserved: number;
+  available: number;
+}
+
+export interface StockLedgerEntry {
+  id: string;
+  itemId: string;
+  item?: Item;
+  location: string;
+  entryType: string;
+  qty: number;
+  balanceQty: number;
+  rate?: number;
+  refType?: string;
+  refId?: string;
+  remarks?: string;
+  createdAt: string;
+}
+
 // ── Items ──────────────────────────────────────────────────────────────────────
 export type ItemCategory = 'FABRIC' | 'TRIM' | 'PACKING' | 'FINISHED_GOODS';
 

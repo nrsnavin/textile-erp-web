@@ -19,6 +19,8 @@ import {
   TeamOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
+  FileTextOutlined,
+  InboxOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   LogoutOutlined,
@@ -36,8 +38,10 @@ const { Text } = Typography;
 const NAV_ITEMS = [
   { key: '/admin/dashboard',       icon: <DashboardOutlined />,    label: 'Dashboard' },
   { key: '/admin/buyers',          icon: <TeamOutlined />,         label: 'Buyers' },
+  { key: '/admin/orders',          icon: <FileTextOutlined />,     label: 'Orders' },
   { key: '/admin/suppliers',       icon: <ShopOutlined />,         label: 'Suppliers' },
   { key: '/admin/purchase-orders', icon: <ShoppingCartOutlined />, label: 'Purchase Orders' },
+  { key: '/admin/inventory',       icon: <InboxOutlined />,        label: 'Inventory' },
 ];
 
 function getBreadcrumbs(pathname: string) {
