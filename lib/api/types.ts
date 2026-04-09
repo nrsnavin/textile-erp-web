@@ -422,9 +422,10 @@ export type ItemCategory = 'FABRIC' | 'TRIM' | 'PACKING' | 'FINISHED_GOODS';
 export interface Item {
   id: string;
   tenantId: string;
+  code: string;
   name: string;
   unit: string;
-  category: ItemCategory;
+  category?: ItemCategory;
   properties?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;

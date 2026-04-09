@@ -199,7 +199,7 @@ export default function InventoryPage() {
       width: 120,
       render: (_: unknown, r: StockBalance) => (
         <Text code style={{ fontSize: 12 }}>
-          {r.item?.id?.slice(0, 8) ?? r.itemId.slice(0, 8)}
+          {r.item?.code ?? r.itemId.slice(0, 8)}
         </Text>
       ),
     },

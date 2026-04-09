@@ -127,7 +127,7 @@ export default function BomListPage() {
 
       <Card style={{ borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
         <Table
-          dataSource={data?.data ?? []}
+          dataSource={data ?? []}
           columns={columns}
           rowKey="id"
           loading={isLoading}
