@@ -349,19 +349,71 @@ export interface StockBalance {
   available: number;
 }
 
+export type LedgerEntryType =
+  | 'GRN_IN'
+  | 'ISSUE_TO_PROD'
+  | 'RETURN_FROM_PROD'
+  | 'ADJUSTMENT'
+  | 'TRANSFER_IN'
+  | 'TRANSFER_OUT'
+  | 'OPENING_STOCK';
+
 export interface StockLedgerEntry {
   id: string;
   itemId: string;
   item?: Item;
   location: string;
-  entryType: string;
+  /** Signed quantity — positive = IN, negative = OUT */
   qty: number;
+  entryType: LedgerEntryType;
   balanceQty: number;
   rate?: number;
   refType?: string;
   refId?: string;
   remarks?: string;
   createdAt: string;
+}
+
+export interface IssueToProductionDto {
+  itemId: string;
+  location?: string;
+  qty: number;
+  orderId?: string;
+  remarks?: string;
+}
+
+export interface ReturnFromProductionDto {
+  itemId: string;
+  location?: string;
+  qty: number;
+  orderId?: string;
+  remarks?: string;
+}
+
+export interface TransferStockDto {
+  itemId: string;
+  fromLocation: string;
+  toLocation: string;
+  qty: number;
+  remarks?: string;
+}
+
+export interface SetOpeningStockDto {
+  itemId: string;
+  location?: string;
+  qty: number;
+  rate?: number;
+  remarks?: string;
+}
+
+export interface MovementFilterParams {
+  itemId?: string;
+  location?: string;
+  entryType?: LedgerEntryType;
+  dateFrom?: string;
+  dateTo?: string;
+  page?: number;
+  limit?: number;
 }
 
 // ── Items ──────────────────────────────────────────────────────────────────────
